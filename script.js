@@ -1,268 +1,123 @@
-/* Create a game of rock, paper, scissors.
-The first function should randomly picks a selection for the computer.
-The second function takes the computers random selection and a case
-    insensitive input from the user, and compares the results.  Then 
-    output the winner.
-The third function will use the other functions to play a five round
-    game and keep score and report a winner at the end.
 
-Outline:
-    Function 1:
-    Create variable for computer selection.
-    randomly generate a number between 1 and 3
-    Assign rock, paper, or scissors based on the random number generated.
-
-    Function 2:
-    Create variable for player selection and get player input
-    De-sensitize player input.
-    compare results with if/else.
-    output winner
-
-    Function 3:
-    create variable to track computer wins
-    create variable to track player wins
-    run playRound function five times, adding the number of wins to win variable
-        as appropriate.
-    compare player wins and computer wins
-    output winner. 
-*/
 
 function computerPlay() {
-    let x = Math.floor(Math.random()*3) + 1;  //random number between 1 and 3
-    if (x === 1) {
-        x = "rock";
+    let computerChoice = Math.floor(Math.random()*3) + 1;  //random number between 1 and 3
+    if (computerChoice === 1) {
+        computerChoice = "rock";
     }
-    else if (x === 2) {
-        x = "paper";
+    else if (computerChoice === 2) {
+        computerChoice = "paper";
     }
-    else if (x === 3) {
-        x = "scissors";
+    else if (computerChoice === 3) {
+        computerChoice = "scissors";
     }
     else {console.log("Error in computerPlay number selection")}
-    return x;
+    return computerChoice;
 }
 
-function playRound() {
-    let playerInput = prompt("Rock, Paper, or Scissors?", "Rock, Paper, Scissors");
-    playerInput = playerInput.trim()
-    if (playerInput.length > 0) {
-        playerInput = playerInput.toLowerCase();
-        if (playerInput === "rock") {
-            let computer = computerPlay()
-            if (playerInput === computer) {
-                alert("Tied");
-                let output = "rockrock";
-                return output;
-            }
-            else if (computer === "paper") {
-                alert("Computer wins");
-                let output = "rockpaper";
-                return output;
-            }
-            else {
-                alert("You win");
-                let output = "rockscissors";
-                return output;
-            }
+const rock = document.querySelector('#rock');
+const paper = document.querySelector('#paper');
+const scissors = document.querySelector('#scissors');
+const compScore = document.querySelector('.computerScore');
+const playScore = document.querySelector('.playerScore');
+const reset = document.querySelector('.reset');
+
+compScore.textContent = '0';
+playScore.textContent = '0';
+
+rock.addEventListener('click', () => playRound('rock'));
+paper.addEventListener('click', () => playRound('paper'));
+scissors.addEventListener('click', () => playRound('scissors'));
+
+reset.addEventListener('click', () => newGame());
+
+function newGame() {
+    compScore.textContent = '0';
+    playScore.textContent = '0';
+}
+
+function playRound(playerInput) {
+    let computer = computerPlay()
+    let computerScore = compScore.textContent;
+        computerScore = Number(computerScore);
+    let playerScore = playScore.textContent;
+        playerScore = Number(playerScore);
+
+
+    if (playerInput === "rock") {
+        if (playerInput === computer) {
+            alert("Tied");
+            return;
         }
-        else if (playerInput === "paper") {
-            let computer = computerPlay()
-            if (playerInput === computer) {
-                alert("Tied");
-                let output = "paperpaper";
-                return output;
-            }
-            else if (computer === "scissors") {
-                alert("Computer wins");
-                let output = "paperscissors";
-                return output;
-            }
-            else {
-                alert("You win");
-                let output = "paperrock";
-                return output;
-            }
-        }
-        else if (playerInput === "scissors") {
-            let computer = computerPlay()
-            if (playerInput === computer) {
-                alert("Tied");
-                let output = "scissorsscissors";
-                return output;
-            }
-            else if (computer === "rock") {
-                alert("Computer wins");
-                let output = "scissorsrock";
-                return output;
-            }
-            else {
-                alert("You win");
-                let output = "scissorspaper";
-                return output;
-            }
+        else if (computer === "paper") {
+            alert("Computer wins");
+            computerScore += 1;
+            compScore.textContent = `${computerScore}`;
+            checkScore()
+            return;
         }
         else {
-            alert("Pick Rock, Paper, or Scissors");
-            playRound()
+            alert("You win");
+            playerScore += 1;
+            playScore.textContent = `${playerScore}`;
+            checkScore()
+            return;
         }
-        return output;
+    }
+    else if (playerInput === "paper") {
+        if (playerInput === computer) {
+            alert("Tied");
+            return;
+        }
+        else if (computer === "scissors") {
+            alert("Computer wins");
+            computerScore += 1;
+            compScore.textContent = `${computerScore}`;
+            checkScore()
+            return;
+        }
+        else {
+            alert("You win");
+            playerScore += 1;
+            playScore.textContent = `${playerScore}`;
+            checkScore()
+            return;
+        }
+    }
+    else if (playerInput === "scissors") {
+        if (playerInput === computer) {
+            alert("Tied");
+            return;
+        }
+        else if (computer === "rock") {
+            alert("Computer wins");
+            computerScore += 1;
+            compScore.textContent = `${computerScore}`;
+            checkScore()
+            return;
+        }
+        else {
+            alert("You win");
+            playerScore += 1;
+            playScore.textContent = `${playerScore}`;
+            checkScore()
+            return;
+        }
     }
     else {
-        alert("Pick Rock, Paper, or Scissors");
-        playRound()
+        console.log('Error in playRound');
+    }
+    
+    function checkScore() {
+        if (computerScore == 5) {
+            alert('The computer wins the game!  Better luck next time.');
+        }
+        else if (playerScore == 5) {
+            alert('You win the game!  The computer might want a rematch.');
+        }
+        else return;
     }
 }
 
-function game() {
-    computerScore = 0;
-    playerScore = 0;
-
-    let score = subFunction()
-        function subFunction() {
-            let compare = playRound();
-            console.log(compare);
-             if (compare === "rockscissors" || compare === "scissorspaper" || compare === "paperrock") {
-                return 1;  //Player wins
-            }
-            else if (compare === "scissorsrock" || compare === "paperscissors" || compare === "rockpaper") {
-                return 2;  //Computer wins
-            }
-            else {
-                return 3;  //Tie
-            }
-        }
-    console.log(score);
-    if (score === 1) {
-        playerScore = playerScore + 1;
-    }
-    else if (score === 2) {
-        computerScore = computerScore + 1;
-    }
-    else {
-        console.log(score);
-    }
-
-    console.log("computer Score: " + computerScore);
-    console.log("player Score: " + playerScore);
 
 
-
-
-
-
-    score = subFunction()
-        function subFunction() {
-            let compare = playRound();
-            if (compare === "rockscissors" || compare === "scissorspaper" || compare === "paperrock") {
-                return 1;  //Player wins
-            }
-            else if (compare === "scissorsrock" || compare === "paperscissors" || compare === "rockpaper") {
-                return 2;  //Computer wins
-            }
-            else {
-                return 3;  //Tie
-            }
-        }
-    if (score === 1) {
-        playerScore = playerScore + 1;
-    }
-    else if (score === 2) {
-        computerScore = computerScore + 1;
-    }
-    else {
-        //Do Nothing
-    }
-
-    console.log("computer Score: " + computerScore);
-    console.log("player Score: " + playerScore);
-
-    score = subFunction()
-        function subFunction() {
-            let compare = playRound();
-            if (compare === "rockscissors" || compare === "scissorspaper" || compare === "paperrock") {
-                return 1;  //Player wins
-            }
-            else if (compare === "scissorsrock" || compare === "paperscissors" || compare === "rockpaper") {
-                return 2;  //Computer wins
-            }
-            else {
-                return 3;  //Tie
-            }
-        }
-    if (score === 1) {
-        playerScore = playerScore + 1;
-    }
-    else if (score === 2) {
-        computerScore = computerScore + 1;
-    }
-    else {
-        //Do Nothing
-    }
-
-    console.log("computer Score: " + computerScore);
-    console.log("player Score: " + playerScore);
-
-    score = subFunction()
-        function subFunction() {
-            let compare = playRound();
-            if (compare === "rockscissors" || compare === "scissorspaper" || compare === "paperrock") {
-                return 1;  //Player wins
-            }
-            else if (compare === "scissorsrock" || compare === "paperscissors" || compare === "rockpaper") {
-                return 2;  //Computer wins
-            }
-            else {
-                return 3;  //Tie
-            }
-        }
-    if (score === 1) {
-        playerScore = playerScore + 1;
-    }
-    else if (score === 2) {
-        computerScore = computerScore + 1;
-    }
-    else {
-        //Do Nothing
-    }
-
-    console.log("computer Score: " + computerScore);
-    console.log("player Score: " + playerScore);
-
-    score = subFunction()
-        function subFunction() {
-            let compare = playRound();
-            if (compare === "rockscissors" || compare === "scissorspaper" || compare === "paperrock") {
-                return 1;  //Player wins
-            }
-            else if (compare === "scissorsrock" || compare === "paperscissors" || compare === "rockpaper") {
-                return 2;  //Computer wins
-            }
-            else {
-                return 3;  //Tie
-            }
-        }
-    if (score === 1) {
-        playerScore = playerScore + 1;
-    }
-    else if (score === 2) {
-        computerScore = computerScore + 1;
-    }
-    else {
-        //Do Nothing
-    }
-
-    console.log("computer Score: " + computerScore);
-    console.log("player Score: " + playerScore);
-
-
-    if (playerScore > computerScore) {
-        alert("You win");
-    }
-    else if (computerScore > playerScore) {
-        alert("You lose");
-    }
-    else {
-        alert("Tied");
-    }
-}
-game()
